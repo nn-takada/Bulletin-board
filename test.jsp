@@ -1,56 +1,67 @@
 <html>
-<head>
-<title>mysql  表示</title>
-</head>
-<body>
-<%
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+  <head>
+  <title>mysql  表示</title>
+  </head>
+  <body>
+  <%
+    import java.sql.Connection;
+    import java.sql.DriverManager;
+    import java.sql.PreparedStatement;
+    import java.sql.ResultSet;
+    import java.sql.SQLException;
 
-public class test {
-  public_static_void main(String[] args){
-    Connection con = null;
-    PreparedStatement pstmt = null;
-    ResultSet rs = null;
+    public class test {
+      public_static_void main(String[] args){
+        Connection con = null;
+        Statement stmt = null;
+        ResultSet rs = null;
 
-    String url = "jdbc:mysql://localhostgi/Bulletinboard";
-    String user = "admin";
-    String pass = "admin";
+        String sqlStr = null;
+        String url = "jdbc:mysql://localhost/bulletinboard";
+        String user = "admin";
+        String pass = "admin";
 
-    try {
-      con = DriverManager.getConnection(url,user,pass);
-      pstmt = con.PreparedStatement("select * from person");
-      rs = pstmt.execiteQuery();
+        try {
+          Class.forName("com.mysql.jdbc.Driver").newInstance();
+          con = DriverManager.getConnection(url,user,pass);
+          stmt = con.createStatement();
+          sqlStr = "SELECT * FROM user";
+          rs = pstmt.execiteQuery(sqlStr);
 
-      while(rs.next()) {
-        System.out.println(rs.getString("name"));
-        System.out.println(rs.getInt("age"));
-        System.out.println(rs.getString("address"));
-      }
-    } catch (SQLException e) {
-      e.printstackTrence();
-    } finally {
-      if (rs != null){
-        try{
-          rs.close();
-        } catch(SQLException e) {
-          e.printstackTrence();
+          while(result.next()){
+            String name = rs.getString("name");
+            String age = rs.getString("age");
+            String address = rs.getString("address");
+            System.out.println(name + "," + age + "," + address);
         }
-      }
-      if (con != null) {
-        try{
+          rs.close();
+
+          pstmt.close();
+
           con.close();
-        }catch (SQLException e) {
-          e.printstackTrence();
+        }
+        catch(SQLException e){
+          System.out.println("Connection Failed. :" + e.toString());
+          throw new Exception();
+        }
+        catch(ClassNotFoundException e){
+          System.out.println("読み込めませんでした"+ e);
+        }
+        finally{
+          try{
+            if(con != null){
+              con.close();
+            }
+          }
+          catch(Exception e){
+            System.out.println("Exception2! :" + e.toString() );
+
+            throw new Exception();
+          }
         }
       }
     }
-  }
-}
-%>
-</body>
+  %>
+  </body>
 </html>
 
